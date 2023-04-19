@@ -1,0 +1,18 @@
+//@version=5
+indicator("Auto Trend Lines", overlay=true)
+
+// Define variables
+var float last_high = na
+var float last_low = na
+var int line_id = na
+
+// Calculate trend lines
+for i = 1 to 500
+    if not na(last_high)
+        line.delete(line_id)
+        line_id := line.new(bar_index[i-1], last_high, bar_index[i], high[i], extend=extend.both)
+    if not na(last_low)
+        line.delete(line_id)
+        line_id := line.new(bar_index[i-1], last_low, bar_index[i], low[i], extend=extend.both)
+    last_high := high[i] > last_high ? high[i] : last_high
+    last_low := low[i] < last_low or na(last_low) ? low[i] : last_low
